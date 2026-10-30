@@ -1,0 +1,12 @@
+frontend fe_dns
+  mode udp
+  bind 0.0.0.0:1053
+  default_backend be_dns_upstream
+
+backend be_dns_upstream
+  mode udp
+  balance roundrobin
+  timeout idle 20s
+  udp-session-ttl 20s
+  server upstream1 1.1.1.1:53
+  server upstream2 8.8.8.8:53

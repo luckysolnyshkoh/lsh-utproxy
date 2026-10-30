@@ -1,0 +1,9 @@
+frontend fe_tcp_echo
+  mode tcp
+  bind 0.0.0.0:10000
+  default_backend be_tcp_echo
+
+backend be_tcp_echo
+  mode tcp
+  balance roundrobin
+  server echo1 127.0.0.1:7 check

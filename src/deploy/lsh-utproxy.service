@@ -1,0 +1,38 @@
+[Unit]
+Description=lsh-utproxy TCP/UDP proxy with a HAProxy-like config
+Documentation=ToDo
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# /opt/lsh-utproxy is the documented installation directory.
+ExecStart=/opt/lsh-utproxy/bin/lsh-utproxy -c /opt/lsh-utproxy/config/main.cfg
+ExecReload=/bin/pkill -9 lsh-utproxy ; /bin/sleep 1 ; /opt/lsh-utproxy/bin/lsh-utproxy -c /opt/lsh-utproxy/config/main.cfg
+#ExecReload=/bin/kill -s HUP $MAINPID
+# Reload = restart for this program: the config is read once at startup, so a
+# reload is a graceful restart (SIGTERM, then start again).
+KillSignal=SIGTERM
+TimeoutStopSec=15
+
+# Run unprivileged. The listeners are bound before privileges are dropped, so
+# ports below 1024 work with CAP_NET_BIND_SERVICE.
+User=nobody
+Group=nogroup
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+
+# Logs go to the file configured in the config file ("log" directive); with
+# "log stdout" they land in the journal instead.
+LimitNOFILE=1048576
+Restart=always
+RestartSec=2
+
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/lsh-utproxy
+
+[Install]
+WantedBy=multi-user.target
