@@ -64,6 +64,7 @@ listen dns
 | Default install directory | Windows `C:\Soft\lsh-utproxy`, Linux `/opt/lsh-utproxy` |
 
 ## Quick start
+## btw, you better follow src/README.md
 
 ```bash
 # Linux
